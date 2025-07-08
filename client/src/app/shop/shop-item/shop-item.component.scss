@@ -1,0 +1,136 @@
+$primary-color: #7961ff;
+$secondary-color: #343a40;
+$background-color: #f8f9fa;
+$text-color: #212529;
+$border-radius: 0.5rem;
+$transition-duration: 0.3s;
+
+// **أضف هذه المتغيرات الجديدة هنا:**
+$danger-color: #dc3545; // لون أحمر شائع (مثل Bootstrap danger)
+$star-color: #ffc107;
+
+
+.card {
+  border: .1px solid #f2eeee;
+  border-radius: 10px;
+  // REMOVE OR ADJUST THIS! A fixed height here can cause content overflow or unnecessary empty space.
+  // It's better to let the card height be determined by its content or use min-height if needed.
+  // height: 200px;
+  overflow: hidden; // Keep this if you want to clip content that goes beyond the card boundaries
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  display: flex; /* Make the card a flex container */
+  flex-direction: column; /* Stack its children vertically */
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.card-img-top {
+  border-radius: 15px 15px 0 0;
+  width: 100%; /* Ensure the image takes full width of its container */
+  height: 200px; /* Set a fixed height for all main images */
+  object-fit: contain; /* Ensures the image fits within the bounds without being cropped, maintaining its aspect ratio. */
+  display: block; /* Removes any extra space below the image */
+  margin: 0 auto; /* Centers the image */
+}
+
+.thumbnails {
+  display: flex;
+  justify-content: start;
+  gap: 0.4rem;
+}
+
+.small-img {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.card-body {
+  position: relative;
+  padding: .7rem;
+  background: white;
+  border-radius: 0 0 15px 15px;
+  display: flex; /* Make card-body a flex container */
+  flex-direction: column; /* Stack its children vertically */
+  flex-grow: 1; /* Allow card-body to grow and fill available space */
+  justify-content: space-between; /* Distribute space between content and buttons */
+}
+
+/* Adjustments for elements within card-body to push content to top and buttons to bottom */
+.card-body > .card-title,
+.card-body > .card-text,
+.card-body > .price,
+.card-body > .rating,
+.card-body > .favorite-icon,
+.card-body > .thumbnails {
+    /* These elements will naturally sit at the top of the flex container */
+    margin-bottom: auto; /* Push content to the top */
+}
+
+/* Specific styling for the buttons container */
+.card-body > .d-flex {
+    margin-top: auto; /* This is key: pushes the d-flex container to the bottom */
+}
+
+
+.card-title {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: $primary-color;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  color: $secondary-color;
+}
+
+.price {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+
+  .old-price {
+    text-decoration: line-through;
+    color: $danger-color;
+    margin-right: 0.5rem;
+  }
+}
+
+.rating {
+  span {
+    color: $star-color;
+    font-size: 1.1rem;
+  }
+}
+
+// Favorite Icon Button positioning
+.favorite-icon {
+  position: absolute;
+  top: 4rem;
+  right: .2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.27rem;
+
+  i {
+    color: rgb(0, 102, 255);
+    font-size: 1rem;
+    transition: color 0.3s ease-in-out;
+  }
+
+  &:hover {
+    background-color: rgb(0, 102, 255);
+    border-radius: 3px;
+    transition: background-color 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+
+    i {
+      color: white;
+    }
+  }
+}

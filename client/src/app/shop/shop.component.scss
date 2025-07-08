@@ -1,0 +1,33 @@
+// SCSS Variables
+$primary-color: #7961ff;
+$secondary-color: #343a40;
+$background-color: #f8f9fa;
+$text-color: #212529;
+$border-radius: 0.5rem;
+$transition-duration: 0.3s;
+
+// **أضف هذه المتغيرات الجديدة هنا:**
+$danger-color: #dc3545; // لون أحمر شائع (مثل Bootstrap danger)
+$star-color: #ffc107; // لون أصفر شائع للنجوم (مثل Bootstrap warning)
+// ----------------------------------------------------
+
+.custom-list-group {
+  .custom-list-item {
+    cursor: pointer;
+    transition: background-color $transition-duration ease, color $transition-duration ease;
+
+    &:hover {
+      background-color: rgba(255, 111, 97, 0.1);
+    }
+
+    &:active {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: #fff;
+    }
+  }
+}
+
+.main-title {
+  margin-top: 40px; 
+}
