@@ -29,7 +29,7 @@ namespace Ecom.Infrastructure.Repositories
 
         public async Task<IEnumerable<ProductDto>> GetAllProduct(ProductParams productParams)
         {
-            if (productParams.pagesize <= 0)
+             if (productParams.pagesize <= 0)
                 productParams.pagesize = 3;
 
             const int MaxPageSize = 6;
@@ -57,6 +57,7 @@ namespace Ecom.Infrastructure.Repositories
                 query = productParams.sort switch
                 {
                     "PriceAce" => query.OrderBy(p => p.NewPrice),
+                    
                     "PriceDce" => query.OrderByDescending(p => p.NewPrice),
                     _ => query.OrderBy(p => p.Name),
                 };

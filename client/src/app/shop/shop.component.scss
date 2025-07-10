@@ -16,14 +16,20 @@ $star-color: #ffc107; // لون أصفر شائع للنجوم (مثل Bootstrap
     cursor: pointer;
     transition: background-color $transition-duration ease, color $transition-duration ease;
 
+    // This is the general hover effect for NON-ACTIVE items
     &:hover {
       background-color: rgba(255, 111, 97, 0.1);
     }
 
-    &:active {
+    // Styles for the active state (assuming an 'active' class is added)
+    &.active {
       background-color: $primary-color;
       border-color: $primary-color;
       color: #fff;
+      
+      // Removed the nested &:hover for active state.
+      // Now, when an item is .active AND hovered, it will retain
+      // the background-color and text color defined in &.active.
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Net;
 using System.Text.Json;
 using Ecom.Api.Helper;
@@ -25,12 +26,18 @@ namespace Ecom.Api.MiddleWare
             try
             {
                 ApplySecurity(context);
-                if (!IsRequestAllowed(context))
-                {
+                if (!_environment.IsDevelopment())
+                { 
+
+                    if (!IsRequestAllowed(context))
+                
+                    {
                     context.Response.StatusCode = 429;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync("Rate limit exceeded. Please try again later.");
                     return;
+               
+                    }
                 }
 
                 await _next(context);
