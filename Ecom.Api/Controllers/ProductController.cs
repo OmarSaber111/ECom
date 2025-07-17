@@ -26,14 +26,14 @@ namespace Ecom.Api.Controllers
         {
             try
             {
-                int totalCount = await _unitOfWork.Products.CountAsync();
+                
                 var products = await _unitOfWork.Products.GetAllProduct(productParams);
                 var paginated = new Pagination<ProductDto>
                 {
                     PageNumber = productParams.pagenumber,
                     PageSize = productParams.pagesize,
-                    TotalCount = totalCount,
-                    Data = products
+                    TotalCount = products.TotalCount,
+                    Data = products.productDtos
                 };
 
                 return Ok(paginated);

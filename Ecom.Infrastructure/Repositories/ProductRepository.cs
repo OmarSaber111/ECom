@@ -27,7 +27,7 @@ namespace Ecom.Infrastructure.Repositories
             _imageManagementService = imageManagementService;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProduct(ProductParams productParams)
+        public async Task<ReturnProductDto> GetAllProduct(ProductParams productParams)
         {
              if (productParams.pagesize <= 0)
                 productParams.pagesize = 3;
@@ -62,9 +62,12 @@ namespace Ecom.Infrastructure.Repositories
                     _ => query.OrderBy(p => p.Name),
                 };
             }
+            ReturnProductDto returnProductDto = new ReturnProductDto();
+            returnProductDto.TotalCount = await query.CountAsync();
+
             query = query.Skip((productParams.pagesize) *(productParams.pagenumber - 1)).Take(productParams.pagesize);
-            var result = _mapper.Map<List<ProductDto>>(query);
-            return result;
+              returnProductDto.productDtos = _mapper.Map<List<ProductDto>>(query);
+            return returnProductDto;
         }
 
         public async Task<bool> AddProductAsync(AddProductDto addProduct)

@@ -16,13 +16,14 @@ namespace Ecom.Infrastructure.Repositories.Service
         {
             var SaveImagesSrc = new List<string>();
             var ImgDirectory = Path.Combine("wwwroot","Images",foldername);
-            if (Directory.Exists(ImgDirectory) is not true) 
+            var dictFlag = Directory.Exists(ImgDirectory);
+            if (!Directory.Exists(ImgDirectory) ) 
             {
-                Directory.CreateDirectory(ImgDirectory);
+                var dirInfo = Directory.CreateDirectory(ImgDirectory);
             }
             foreach(var item in form) 
             {
-                if(item.Length > 0)
+                if(item != null && item.Length > 0)
                 {
                     string? ImgName = item.FileName;
                     var ImgSrc = $"/Images/{foldername}/{ImgName}";
