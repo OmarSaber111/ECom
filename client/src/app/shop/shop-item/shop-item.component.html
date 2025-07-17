@@ -23,9 +23,10 @@
                            <button class="btn btn-dark">
                              <i class="fa fa-shopping-cart"></i> Add to Cart
                            </button>
-                           <button class="btn btn-success">
+                           <button [routerLink]="['/product-details', product.id]" class="btn btn-success">
                              <i class="fa fa-info-circle"></i> Details
                            </button>
+
                         </div>
                     </div>
                </div>
