@@ -1,34 +1,48 @@
-            
-              <div class="card h-100">
-                <img src="https://localhost:44375/{{product.photos[0].imgName}}" class="card-img-top" alt="Product Image">
-                   <div class="card-body">
-                        <div class="thumbnails mb-3">
-                          @for(item of product.photos; track $index) {
-                             <img src="https://localhost:44375/{{item.imgName}}" alt="Thumbnail 1" class="thumbnail-img small-img">
-                          }
-                            </div>
-                         <h5 class="card-title">{{product.name}}</h5>
-                <p class="card-text">{{product.description}}</p>
-                <p class="price">
-                  <span class="old-price">{{ product.oldPrice| currency}}</span> 
-                  {{product.newPrice| currency}}
-                </p>
-                        <div class="rating mb-3">
-                  
-                        </div>
-                        <button class=" favorite-icon">
-                          <i class="fa fa-bookmark"></i>
-                        </button>
-                        <div class="d-flex justify-content-between align-items-start">
-                           <button class="btn btn-dark">
-                             <i class="fa fa-shopping-cart"></i> Add to Cart
-                           </button>
-                           <button [routerLink]="['/product-details', product.id]" class="btn btn-success">
-                             <i class="fa fa-info-circle"></i> Details
-                           </button>
+<!-- Only show the card if product.photos is defined and has at least one image -->
+<div class="card h-100" *ngIf="product.photos.length > 0">
+  <!-- Main image -->
+  <img 
+    [src]="'https://localhost:44375/' + product.photos[0].imgName" 
+    class="card-img-top" 
+    alt="Product Image"
+  >
 
-                        </div>
-                    </div>
-               </div>
-            
+  <div class="card-body">
+    <!-- Thumbnails -->
+    <div class="thumbnails mb-3">
+      @for (item of product.photos; track $index) {
+        <img 
+          [src]="'https://localhost:44375/' + item.imgName" 
+          alt="Thumbnail" 
+          class="thumbnail-img small-img"
+        >
+      }
+    </div>
 
+    <!-- Product Info -->
+    <h5 class="card-title">{{ product.name }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+    <p class="price">
+      <span class="old-price">{{ product.oldPrice | currency }}</span>
+      {{ product.newPrice | currency }}
+    </p>
+
+    <div class="rating mb-3">
+      <!-- Rating can be added here -->
+    </div>
+
+    <!-- Favorite & Actions -->
+    <button class="favorite-icon">
+      <i class="fa fa-bookmark"></i>
+    </button>
+
+    <div class="d-flex justify-content-between align-items-start">
+      <button class="btn btn-dark">
+        <i class="fa fa-shopping-cart"></i> Add to Cart
+      </button>
+      <button [routerLink]="['/shop/product-details', product.id]" class="btn btn-success">
+        <i class="fa fa-info-circle"></i> Details
+      </button>
+    </div>
+  </div>
+</div>

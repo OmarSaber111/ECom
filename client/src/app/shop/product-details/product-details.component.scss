@@ -1,12 +1,18 @@
 .main-img {
   text-align: center;
 }
-
+::ng-deep .ngxImageZoomContainer > img {
+  max-height: 300px;
+}
 .previews img {
   border: 2px solid #ddd;
-  padding: 5px;
+  padding: 2px;
   transition: transform 0.3s ease-in-out;
+  height: 100px;
+  justify-content: start
+  
 }
+
 
 .previews img:hover {
   transform: scale(1.1);
