@@ -17,16 +17,21 @@ namespace Ecom.Infrastructure.Repositories
         public ICategoryRepository Categories { get;}
 
         public IPhotoRepository Photos { get; }
+
+        public ICustomerBasketRepository CustomerBaskets { get; }
+
         public UniteOfWork(
          AppDbContext context,
          IProductRepository productRepo,
          ICategoryRepository categoryRepo,
-         IPhotoRepository photoRepo)
+         IPhotoRepository photoRepo,
+         ICustomerBasketRepository customerBaskets)
         {
             _context = context;
             Products = productRepo;
             Categories = categoryRepo;
             Photos = photoRepo;
+            CustomerBaskets = customerBaskets;
         }
 
         public async Task<int> CompleteAsync()

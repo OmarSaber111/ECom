@@ -11,6 +11,7 @@ namespace Ecom.Core.Interfaces
         IProductRepository Products { get; }
         ICategoryRepository Categories { get; }
         IPhotoRepository Photos { get; }
+        ICustomerBasketRepository CustomerBaskets { get; }
 
         Task<int> CompleteAsync();
     }

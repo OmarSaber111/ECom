@@ -6,10 +6,9 @@ import { ProductDetailsComponent } from './shop/product-details/product-details.
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'shop',component: ShopComponent},
-  {path: 'product-details/:id', component: ProductDetailsComponent},
+  {path: 'shop',loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)},
   {path: 'home',component: HomeComponent},
-  {path: '**', redirectTo: '/shop' }
+  {path: '**', redirectTo: 'home', pathMatch: 'full'},
 
 ];
 
