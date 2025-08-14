@@ -1,0 +1,70 @@
+<div *ngIf="basket?.id === null; else basketContent">
+  <p class="text-center text-danger">your basket is empty</p>
+</div>
+
+<ng-template #basketContent>
+  <div class="container pt-4 flex-container">
+    <div class="basket-container">
+      <table class="table table-hover custom-table">
+        <thead>
+          <tr class="bg-info text-white">
+            <th>Product</th>
+            <th></th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+<tbody>
+  <tr *ngFor="let item of basket?.basketItems;  let i = index">
+    <td>
+      <a class="text-dark text-decoration-none" [routerLink]="'/shop/product-details/' + item.id">
+        {{item.name}}
+      </a>
+    </td>
+    <td>
+      <img src="https://localhost:44375/{{item.img}}" class="product-image img-fluid" alt="{{item.name}}"> 
+    </td>
+    <td class="description">
+      {{item.description}}
+    </td>
+    <td>{{item.price | currency}}</td>
+    <td>
+        <div class="d-flex justify-content-center align-items-center">
+  <button (click)="incrementQuantity(item)" class="btn btn-sm text-info">
+    <i class="fa fa-plus"></i>
+  </button>
+  <span class="mx-2">{{ item.quantity }}</span>
+  <button (click)="DecrementQuantity(item)" class="btn btn-sm text-danger">
+    <i class="fa fa-minus"></i>
+  </button>
+</div>
+    </td>
+    <td>{{item.price * item.quantity | currency}}</td>
+    <td>
+      <button (click)="RemoveBasket(item)" class="btn btn-danger">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+  </tr>
+</tbody>
+        <tbody>
+          </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="order-summary-container">
+    <app-order-total></app-order-total>
+</div>
+</ng-template>
+
+
+
+
+
+
+
+
+
