@@ -18,7 +18,12 @@ $transition-duration: 0.3s;
       height: $navbar-height;
     }
   }
- 
+ .material-icons {
+  font-family: 'Material Icons';
+  font-size: 24px;
+  line-height: 1;
+  /* ... */
+}
   .navbar-nav {
     .nav-item {
       .nav-link {
@@ -89,4 +94,3 @@ $transition-duration: 0.3s;
     }
   }
 }
- 

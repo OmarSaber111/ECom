@@ -11,6 +11,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { loaderInterceptor } from './core/interceptor/loader.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 
@@ -34,7 +35,8 @@ import { loaderInterceptor } from './core/interceptor/loader.interceptor';
     withInterceptors([
       loaderInterceptor
     ])
-  )
+  ),
+  provideAnimationsAsync()
 ],
   bootstrap: [AppComponent]
 })

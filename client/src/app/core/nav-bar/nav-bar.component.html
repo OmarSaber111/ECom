@@ -57,16 +57,15 @@
       <ul class="navbar-nav ml-auto align-items-center">
         <!-- Cart -->
         <li class="nav-item">
-          <a routerLink="/cart" class="nav-link">
-            <i class="material-icons">shopping_cart</i>
+          <a routerLink="/cart" class="nav-link" routerLink="/basket">
+            <i matBadgeColor="warn" [matBadge]="(cartCount | async)?.basketItems?.length" class="material-icons">shopping_cart</i>
           </a>
         </li>
-
         <!-- User Dropdown -->
 
         <li class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
-            <i class="material-icons">account_circle</i>
+            <i  class="material-icons">account_circle</i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>

@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
-  styleUrls: ['./shop.component.scss'] // ✅ Fixed typo: was 'styleUrl'
+  styleUrls: ['./shop.component.scss'] 
 })
 export class ShopComponent implements OnInit {
   productparam = new productparam();
@@ -33,9 +33,7 @@ export class ShopComponent implements OnInit {
         this.totalCount = response.totalCount;
         this.productparam.pageNumber = response.pageNumber;
         this.productparam.pageSize = response.pageSize;
-        this._toastr.success('Products loaded successfully!', 'Success', {
-
-        });
+        this._toastr.success('Products loaded successfully!', 'Success');
       },
       error: (error) => {
         console.error('Error fetching products:', error);
@@ -47,9 +45,7 @@ export class ShopComponent implements OnInit {
     this._Shopservice.getallcategories().subscribe({
       next: (response) => {
         this.categories = response;
-        this._toastr.success('Categories loaded successfully!', 'Success', {
-       
-        });
+        this._toastr.success('Categories loaded successfully!', 'Success');
       },
       error: (error) => {
         console.error('Error fetching categories:', error);
