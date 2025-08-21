@@ -8,6 +8,8 @@ const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'shop',loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)},
   {path: 'basket',loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule)},
+  {path: 'checkout',loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule)},
+  {path: 'Account',loadChildren: () => import('./identity/identity.module').then(m => m.IdentityModule)},
   {path: 'home',component: HomeComponent},
   {path: '**', redirectTo: 'home', pathMatch: 'full'},
 

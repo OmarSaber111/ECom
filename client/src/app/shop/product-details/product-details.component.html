@@ -30,7 +30,7 @@
                 [src]="'https://localhost:44375/' + item.imgName"
                 alt="Sale"
               />
-            </div>
+            </div>   
           }
         </div>
       </div>
@@ -51,27 +51,21 @@
           <p class="old-price mb-1">
             <del>{{ productDetails.oldPrice | currency }}</del>
             <span class="old-price-discount text-danger">
-              (
-              {{
-                ((productDetails.oldPrice - productDetails.newPrice) /
-                  productDetails.oldPrice) *
-                  100
-                  | number: '1.0-0'
-              }}% OFF)
+              (%{{calculatediscount(productDetails.oldPrice, productDetails.newPrice)}} OFF)
             </span>
           </p>
 
           <p class="new-price text-bold mb-1">
             {{ productDetails.newPrice | currency }}
           </p>
-          <p class="text-danger">quantity : 1</p>
+          <p class="text-danger">{{quantity}}</p>
 
           <div>
-            <button class="btn btn-danger text-white">
+            <button (click)="decrementquantity()" class="btn btn-danger text-white">
               <i class="fa fa-minus"></i>
             </button>
             &nbsp;
-            <button class="btn btn-dark text-white">
+            <button (click)="incrementquantity()" class="btn btn-dark text-white">
               <i class="fa fa-plus"></i>
             </button>
           </div>
@@ -85,12 +79,12 @@
             </a>
           </div>
           <div class="block pt-2">
-            <button class="shadow btn custom-btn">
+            <button (click)="addtobasket()" class="shadow btn custom-btn">
               <i class="fa fa-shopping-cart"></i> Add to cart
             </button>
           </div>
           <div class="block pt-2">
-            <button class="shadow btn custom-btn">
+            <button routerLink="/shop" class="shadow btn custom-btn">
               <i class="fa fa-shopping-bag"></i> Shopping
             </button>
           </div>
@@ -114,12 +108,32 @@
           <p class="description">{{ productDetails.description }}..... </p>
         </div>
 
-        <!-- Questions -->
-        <div class="row questions bg-light p-3">
-          <div class="col-md-1 icon">
-            <i class="fa-brands fa-rocketchat questions-icon"></i>
-          </div>
-        </div>
+        
+<div class="card mb-3 shadow-sm">
+  <div class="card-body bg-light">
+    <p class="mb-0">
+      Have a question about our products at <strong>E-Store</strong>? 
+      Feel free to contact our representatives via <a href="#">live chat</a> or <a href="mailto:support@estore.com">email</a>.
+    </p>
+  </div>
+</div>
+
+<!-- Delivery info -->
+<div class="row delivery bg-light p-3 mb-3">
+  <div class="col-md-12">
+    <p class="fw-bold">
+      🚚 Delivery done in 3 days from date of purchase
+    </p>
+    <small class="text-muted">Order now to get this product delivery</small>
+  </div>
+</div>
+
+<!-- Delivery options -->
+<div class="row delivery-options bg-light p-3">
+  <div class="col-md-12">
+    <p class="fw-bold">▾ Delivery options</p>
+    <p class="text-muted">View delivery options here</p>
+  </div>
       </div>
     </div>
   </div>

@@ -33,11 +33,13 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CORSPolicy");
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
 
 app.MapControllers();
 
