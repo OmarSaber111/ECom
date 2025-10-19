@@ -1,3 +1,4 @@
+using Ecom.Api.Hubs;
 using Ecom.Api.MiddleWare;
 using Ecom.Infrastructure;
 
@@ -22,6 +23,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.RepositoryDI(builder.Configuration);
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,7 +42,7 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 
-
+app.MapHub<ProductHub>("/hubs/product");
 app.MapControllers();
 
 app.Run();

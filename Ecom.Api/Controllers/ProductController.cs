@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Ecom.Api.Helper;
+using Ecom.Api.Hubs;
 using Ecom.Core.Dtos.Product;
 using Ecom.Core.Interfaces;
 using Ecom.Core.Sharing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Ecom.Api.Controllers
 {
@@ -15,11 +17,13 @@ namespace Ecom.Api.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHubContext<ProductHub> _hubContext;
 
-        public ProductController(IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductController(IUnitOfWork unitOfWork, IMapper mapper,IHubContext<ProductHub> hubContext )
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
         [HttpGet("Get-All-Product")]
         public async Task<IActionResult> GetAllProduct([FromQuery]ProductParams productParams)
@@ -65,6 +69,7 @@ namespace Ecom.Api.Controllers
             try
             {
                 var product = await _unitOfWork.Products.AddProductAsync(addProductDto);
+                await _productHub.NotifyProductUpdate($"New Product Added: {addProductDto.Name}");
                 return Ok(product);
             }
             catch (Exception ex)
