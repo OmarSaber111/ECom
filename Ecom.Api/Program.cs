@@ -33,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("CORSPolicy");
-
+app.UseRouting();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -42,7 +42,7 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 
-app.MapHub<ProductHub>("/hubs/product");
+app.MapHub<ProductHub>("/ProductHub");
 app.MapControllers();
 
 app.Run();

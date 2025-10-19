@@ -4,6 +4,7 @@ import { IProduct } from '../shared/models/product';
 import { ICategory } from '../shared/models/category';
 import { productparam } from '../shared/models/productparam';
 import { ToastrService } from 'ngx-toastr';
+import { Signalr } from '../shared/signalr';
 
 @Component({
   selector: 'app-shop',
@@ -18,12 +19,14 @@ export class ShopComponent implements OnInit {
 
   constructor(
     private _Shopservice: ShopService,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
+    private _signalR: Signalr
   ) {}
 
   ngOnInit(): void {
     this.getallproducts();
     this.getallcategories();
+    this._signalR.startConnection();
   }
 
   getallproducts() {

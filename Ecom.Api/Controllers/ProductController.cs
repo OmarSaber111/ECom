@@ -69,7 +69,7 @@ namespace Ecom.Api.Controllers
             try
             {
                 var product = await _unitOfWork.Products.AddProductAsync(addProductDto);
-                await _productHub.NotifyProductUpdate($"New Product Added: {addProductDto.Name}");
+                await _hubContext.Clients.All.SendAsync("NotifyProductUpdate", $"New Product Added: {addProductDto.Name}");
                 return Ok(product);
             }
             catch (Exception ex)
