@@ -9,8 +9,12 @@ using Ecom.Core.Entities.IdentityEntities;
 using Ecom.Core.Interfaces;
 using Ecom.Core.IService;
 using Ecom.Core.Sharing;
+using Ecom.Infrastructure.Data;
+using Ecom.Infrastructure.Identity;
 using Ecom.Infrastructure.Repositories.Service;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecom.Infrastructure.Repositories
 {
@@ -20,13 +24,15 @@ namespace Ecom.Infrastructure.Repositories
         private readonly IEmailService _emailService;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly EcomIdentityDbContext _context;
 
-        public AuthRepository(UserManager<AppUser> userManager, IEmailService emailService, SignInManager<AppUser> signInManager, ITokenService tokenService)
+        public AuthRepository(UserManager<AppUser> userManager, IEmailService emailService, SignInManager<AppUser> signInManager, ITokenService tokenService, EcomIdentityDbContext context)
         {
             _userManager = userManager;
             _emailService = emailService;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         public async Task<string> Login(LoginDto loginDto)
@@ -66,7 +72,7 @@ namespace Ecom.Infrastructure.Repositories
                 throw new InvalidOperationException("Login failed");
             }
             // Generate JWT token or any other authentication token here
-            return await _tokenService.CreateToken(user,_userManager);
+            return  _tokenService.GetAndGenerateToken(user);
         }
 
         public async Task<string> Register(RegisterDto registerDto)
@@ -140,7 +146,7 @@ namespace Ecom.Infrastructure.Repositories
              await SendEmail(
                 email: user.Email,
                 code: code,
-                component: "Resete-password",
+                component: "resete-password",
                 subject: "Resete-password",
                 message: "Please Click on button to Resete Password"
             );
@@ -192,6 +198,84 @@ namespace Ecom.Infrastructure.Repositories
                 message: "Please activate your email, Click on button to active"
             );
             return false;
+        }
+
+        public async Task<bool> UpdateAddress(string email, Address address)
+        {
+            var findUser = await _userManager.FindByEmailAsync(email);
+            if (findUser == null) return false;
+            var myAddress = await _context.Address.FirstOrDefaultAsync(add =>add.AppUserId == findUser.Id);
+            if (myAddress == null)
+            {
+                address.AppUserId = findUser.Id;
+                _context.Address.Add(address);
+            }
+            else
+            {
+                myAddress.FirstName = address.FirstName;
+                myAddress.LastName = address.LastName;
+                myAddress.Street = address.Street;
+                myAddress.City = address.City;
+                myAddress.State = address.State;
+                myAddress.ZipCode = address.ZipCode;
+                _context.Address.Update(myAddress);
+
+            }
+            await _context.SaveChangesAsync();
+            return true;
+
+
+        }
+
+        //public async Task<bool> UpdateAddress(string email, Address address)
+        //{
+        //    try
+        //    {
+        //        var findUser = await _userManager.FindByEmailAsync(email);
+        //        if (findUser == null) return false;
+
+        //        var myAddress = await _context.Address.FirstOrDefaultAsync(add => add.Id == address.Id);
+
+        //        if (myAddress == null)
+        //        {
+        //            address.AppUserId = findUser.Id;
+        //            _context.Address.Add(address);
+        //        }
+        //        else
+        //        {
+        //            // مهم: حافظ على AppUserId
+        //            address.AppUserId = findUser.Id;
+
+        //            // الأفضل تحدث الكيان بدل ما تعمل Update بالكيان الجديد
+        //            // myAddress.Street = address.Street;
+        //            // myAddress.City = address.City;
+        //            // ... باقي الخصائص
+        //            // (وساعتها مش محتاج Update)
+
+        //            _context.Entry(myAddress).State = EntityState.Detached; // فك التتبع عن القديم
+        //            _context.Address.Update(address);
+        //        }
+
+        //        await _context.SaveChangesAsync();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // لو فيه InnerException من SQL/EF Core اعرضها
+        //        var errorMessage = ex.InnerException?.Message ?? ex.Message;
+        //        Console.WriteLine($"Error in UpdateAddress: {errorMessage}");
+
+        //        // ممكن تعمل log برضه في ملف أو DB
+        //        return false;
+        //    }
+        //}
+
+
+        public async Task<Address> GetUserAddress(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var address = await _context.Address.FirstOrDefaultAsync(m=>m.AppUserId == user.Id);
+            return address;
         }
     }
 }

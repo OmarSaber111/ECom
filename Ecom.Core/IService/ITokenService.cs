@@ -10,6 +10,6 @@ namespace Ecom.Core.IService
 {
     public interface ITokenService
     {
-        Task<string> CreateToken(AppUser user, UserManager<AppUser> userManager);
+        string GetAndGenerateToken(AppUser user);
     }
 }

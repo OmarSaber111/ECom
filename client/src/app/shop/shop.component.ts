@@ -45,7 +45,7 @@ export class ShopComponent implements OnInit {
     this._Shopservice.getallcategories().subscribe({
       next: (response) => {
         this.categories = response;
-        this._toastr.success('Categories loaded successfully!', 'Success');
+      
       },
       error: (error) => {
         console.error('Error fetching categories:', error);

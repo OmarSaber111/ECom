@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ecom.Core.Dtos.Auth;
+using Ecom.Core.Entities.IdentityEntities;
 
 namespace Ecom.Core.Interfaces
 {
@@ -14,5 +15,7 @@ namespace Ecom.Core.Interfaces
         Task<bool> SendEmailForForgetPassword(string email);
         Task<string> ResetPassword(ResetePasswordDto resetePasswordDto);
         Task<bool> ActiveAccount(ActiveAccountDto activeAccountDto);
+        Task<bool> UpdateAddress(string email, Address address);
+        Task<Address> GetUserAddress(string email);
     }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { PaginationComponent } from './component/pagination/pagination.component';
 import { OrderTotalComponent } from './component/order-total/order-total.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { OrderTotalComponent } from './component/order-total/order-total.compone
   ],
   imports: [
     CommonModule,
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    RouterModule
   ],
   exports: [
     PaginationModule,

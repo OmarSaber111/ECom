@@ -9,9 +9,11 @@ import { ShopModule } from './shop/shop.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors, withFetch} from '@angular/common/http';
 import { loaderInterceptor } from './core/interceptor/loader.interceptor';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { credentialsInterceptor } from './core/interceptor/credential.interceptor';
+
+
 
 
 
@@ -26,17 +28,22 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     HttpClientModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({
+     timeOut: 1000,  
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
 
   ],
- providers: [
+providers: [
+  provideHttpClient(withFetch()),
   provideClientHydration(),
   provideHttpClient(
     withInterceptors([
-      loaderInterceptor
+      loaderInterceptor,
+      credentialsInterceptor
     ])
-  ),
-  provideAnimationsAsync()
+  )
 ],
   bootstrap: [AppComponent]
 })

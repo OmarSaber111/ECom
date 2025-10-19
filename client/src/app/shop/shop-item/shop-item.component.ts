@@ -10,8 +10,10 @@ import { BasketService } from '../../basket/basket.service';
 export class ShopItemComponent  {
  @Input() product!: IProduct;
  constructor(private _basketservice: BasketService) { }
+ 
   setBasketItem() {
     this._basketservice.addItemToBasket(this.product)
+    console.log("xxxxxxxxxxxxxxxx",this.product);
   }
 
 }

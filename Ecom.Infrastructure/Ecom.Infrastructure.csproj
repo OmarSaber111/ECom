@@ -26,6 +26,7 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="9.0.6" />
     <PackageReference Include="MimeKit" Version="4.13.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.47" />
+    <PackageReference Include="Stripe.net" Version="48.5.0" />
   </ItemGroup>
 
   <ItemGroup>

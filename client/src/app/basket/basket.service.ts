@@ -3,6 +3,8 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { Basket, IBasket, IBasketItem, IBasketTotal } from '../shared/models/basket';
 import { IProduct } from '../shared/models/product';
+import { delivery } from '../shared/delivery';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +14,34 @@ export class BasketService  {
   constructor(private _http :HttpClient) { }
 
   BaseUrl = 'https://localhost:44375/api/CustomerBasket/';
+  baseUrl2 = environment.baseUrl;
    private basketsource = new BehaviorSubject<IBasket | null>(null);
   basket$ = this.basketsource.asObservable();
   private basketSourseTotal = new BehaviorSubject<IBasketTotal | null>(null);
   baskeTotal$ = this.basketSourseTotal.asObservable();
   shipPrice:number = 0;
+    setshippingprice(delivery:delivery){
+      this.shipPrice = delivery.price;
+      this.calcualateTotal();
+    }
+   createPaymentIntent(deliveryMethodId: number = 1) {
+  const basket = this.GetCurrentValue();
+  return this._http.post<IBasket>(
+    this.baseUrl2 + `Payment/CreateorUpdate-Payment?basketId=${basket?.id}&deliverymethod=${deliveryMethodId}`,
+    {}
+  ).pipe(
+    map((value: IBasket) => {
+      this.basketsource.next(value);
+      return value;
+    })
+  );
+}
 
+    DeleteBasket(){
+      this.basketsource.next(null);
+      localStorage.removeItem('basketId');
+      this.basketSourseTotal.next(null);
+    }
     calcualateTotal() {
     const basket = this.GetCurrentValue();
     if (!basket) {
@@ -45,6 +69,7 @@ export class BasketService  {
     )
   }
   SetBasket(basket: IBasket) {
+    console.log('Sending basket:', basket);
     return this._http.post<IBasket>(this.BaseUrl + "Add-Customer-Basket ", basket).subscribe(
       (value: IBasket) => {
         this.basketsource.next(value);

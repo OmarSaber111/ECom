@@ -21,31 +21,31 @@ namespace Ecom.Infrastructure.Repositories.Service
         {
             _configuration = configuration;
         }
-        
-        public async Task<string> CreateToken(AppUser user, UserManager<AppUser> userManager)
-        {
-            var authclaims = new List<Claim>()
-            {
-                new Claim( ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim( ClaimTypes.Name, user.UserName),
-                new Claim( ClaimTypes.Email, user.Email),
-                new Claim( ClaimTypes.MobilePhone, user.PhoneNumber)
-            };
-            var userRoles = await userManager.GetRolesAsync(user);
-            foreach (var Role in userRoles) 
-            {
-                authclaims.Add(new Claim(ClaimTypes.Role, Role));
-            }
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT: Key"]));
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                //audience: _configuration["JWT:Audience"],
-                //expires: DateTime.Now.AddDays(double.Parse(_configuration["Key:DurationINDays"])),
-                claims: authclaims,
-                signingCredentials: new SigningCredentials(key,SecurityAlgorithms.HmacSha256Signature)
-                );
-            return new JwtSecurityTokenHandler().WriteToken(token);
+        public string GetAndGenerateToken(AppUser user)
+        {
+            List<Claim> claims = new List<Claim>()
+         {
+             new Claim(ClaimTypes.Name, user.UserName),
+             new Claim(ClaimTypes.Email, user.Email)
+         };
+            var security = _configuration["Token:Secret"];
+            var key = Encoding.UTF8.GetBytes(security);
+            SigningCredentials credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(1),
+                Issuer = _configuration["Token:Issuer"],
+                Audience = _configuration["Token:Audience"],
+                SigningCredentials = credentials,
+                NotBefore = DateTime.UtcNow
+
+            };
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

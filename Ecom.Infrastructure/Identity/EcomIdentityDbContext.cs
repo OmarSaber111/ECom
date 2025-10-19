@@ -15,6 +15,7 @@ namespace Ecom.Infrastructure.Identity
         {
 
         }
+        public DbSet<Address> Address { get; set; }
       
     }
 }

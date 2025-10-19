@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IdentityService } from '../identity.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 export class RegisterComponent implements OnInit {
 fromGroup!: FormGroup; 
 
-  constructor(private fb: FormBuilder, private _identityservice: IdentityService,private _tostar:ToastrService) {}
+  constructor(private fb: FormBuilder, private _identityservice: IdentityService,private _tostar:ToastrService, private router:Router) {}
 
   ngOnInit(): void {
     this.formValidation();
@@ -48,6 +49,7 @@ fromGroup!: FormGroup;
         next: (response) => {
           console.log(response);
           this._tostar.success('Registration successful, Please Confirm your email', 'Success');
+          this.router.navigateByUrl('/Account/login');
         },
         error: (error: any) => {
           console.log(error);

@@ -37,7 +37,9 @@ namespace Ecom.Infrastructure
             services.AddScoped<ICustomerBasketRepository, CustomerBasketRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ITokenService,TokenService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddSingleton<IFileProvider>(
             new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
             );
@@ -57,11 +59,10 @@ namespace Ecom.Infrastructure
 
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = true; 
+                options.SignIn.RequireConfirmedEmail = true;
             })
-             .AddEntityFrameworkStores<EcomIdentityDbContext>()
-             .AddDefaultTokenProviders();
-
+ .AddEntityFrameworkStores<EcomIdentityDbContext>()
+ .AddDefaultTokenProviders();
 
             services.AddSingleton<IConnectionMultiplexer>(I =>
             {
@@ -69,47 +70,41 @@ namespace Ecom.Infrastructure
                 return ConnectionMultiplexer.Connect(config);
             });
 
-
-            services.AddAuthentication(op =>
+            // ---------------- Authentication ----------------
+            services.AddAuthentication(options =>
             {
-                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                op.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-.AddCookie(o =>
-{
-    o.Cookie.Name = "token";
-    o.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
-})
-.AddJwtBearer(op =>
-{
-    op.RequireHttpsMetadata = false;
-    op.SaveToken = true;
-    op.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(configuration["JWT:Key"])
-        ),
-        ValidateIssuer = true,
-        ValidIssuer = configuration["JWT:Issuer"],
-        ValidateAudience = false,
-        ClockSkew = TimeSpan.Zero
-    };
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
 
-    op.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            context.Token = context.Request.Cookies["token"];
-            return Task.CompletedTask;
-        }
-    };
-});
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Secret"])),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,    
+                    ValidIssuer = configuration["Token:Issuer"],
+                    ValidAudience = configuration["Token:Audience"],
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.ContainsKey("token"))
+                        {
+                            context.Token = context.Request.Cookies["token"];
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
 
             return services;

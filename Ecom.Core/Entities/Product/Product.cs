@@ -12,6 +12,7 @@ namespace Ecom.Core.Entities.Product
         public string? Name { get; set; }
         public string? Description { get; set; }
         public decimal NewPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal OldPrice { get; set; }
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
