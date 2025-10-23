@@ -14,7 +14,7 @@ export class Signalr {
   public startConnection(): void {
     debugger;
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:44375/ProductHub') // 👈 your backend hub URL
+      .withUrl('https://localhost:44375/ProductHub') 
       .withAutomaticReconnect()
       .build();
 
@@ -26,11 +26,11 @@ export class Signalr {
     this.addProductListener();
   }
 
-  // Listen for messages from the server
+  
   private addProductListener(): void {
     this.hubConnection.on('NotifyProductUpdate', (message: string) => {
       console.log('Product update:', message);
-      this.toastr.info(message, 'Product Notification'); // optional toastr
+      this.toastr.info(message, 'Product Notification'); 
     });
   }
   
